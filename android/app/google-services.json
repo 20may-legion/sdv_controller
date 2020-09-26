@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "72006686107",
+    "firebase_url": "https://sdv-controller.firebaseio.com",
+    "project_id": "sdv-controller",
+    "storage_bucket": "sdv-controller.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72006686107:android:32667c0578ae8c845ffd3e",
+        "android_client_info": {
+          "package_name": "com.cgpit.sdv_controller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72006686107-f9cjnh9pl5pv7ga2gogv0mjmbpd4i081.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cgpit.sdv_controller",
+            "certificate_hash": "43497561547953837fde7d307fc7e5c6ae29201d"
+          }
+        },
+        {
+          "client_id": "72006686107-2gckc1vu37jb217rka0hruac6d8qvp3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXVtNHpga8iZ3aq2xQt5wU9GK3ATCpp6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72006686107-2gckc1vu37jb217rka0hruac6d8qvp3o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
