@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sdv_controller/screens/fbdb.dart';
 import 'package:sdv_controller/screens/signin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snapshot/snapshot.dart';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -47,14 +49,14 @@ class _SigninState extends State<Signin> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30.0,
-                      color: textColor(context),
+                      color: Colors.black,
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
                 CircleAvatar(
                   radius: 100,
-                  backgroundColor: iconsColor(context),
+                  backgroundColor: Colors.blueGrey.shade100,
                   child: CircleAvatar(
                     radius: 95,
                     backgroundColor: Colors.grey.shade600,
@@ -62,12 +64,8 @@ class _SigninState extends State<Signin> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
-                      ),
+                Card(
+                  color: Colors.blueGrey.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -80,7 +78,7 @@ class _SigninState extends State<Signin> {
                                 hintText: 'Enter UTU email',
                                 icon: new Icon(
                                   Icons.mail,
-                                  color: textColor(context),
+                                  color: Colors.black,
                                 )),
                             keyboardType: TextInputType.text,
                           ),
@@ -92,12 +90,8 @@ class _SigninState extends State<Signin> {
                 SizedBox(
                   height: 16,
                 ),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
-                      ),
+                Card(
+                  color: Colors.blueGrey.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -110,7 +104,7 @@ class _SigninState extends State<Signin> {
                                 hintText: 'Enter password',
                                 icon: new Icon(
                                   Icons.lock,
-                                  color: textColor(context),
+                                  color: Colors.black,
                                 )),
                             keyboardType: TextInputType.text,
                             obscureText: true,
@@ -123,22 +117,22 @@ class _SigninState extends State<Signin> {
                 SizedBox(
                   height: 16,
                 ),
-                NeumorphicButton(
-                  style: NeumorphicStyle(
-                      depth: NeumorphicTheme.of(context).current.depth,
-                      intensity: NeumorphicTheme.of(context).current.intensity,
-                      color: iconsColor(context) //customize color here
-                      ),
-                  onPressed: () {
+                RaisedButton(
+                  color: Colors.blueGrey.shade100,
+                  onPressed: () async {
                     print(uemail);
                     print(upassword);
+                    print(emailvalid(uemail));
+                    if (emailvalid(uemail) == false) {
+                      alertemail(context);
+                    }
                     signIn();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'Sign In',
-                      style: TextStyle(color: textColor(context), fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                   ),
                 ),
@@ -150,38 +144,79 @@ class _SigninState extends State<Signin> {
     );
   }
 
+  Future alertemail(BuildContext context) async {
+    return showDialog(
+      context: context,
+      child: new AlertDialog(
+        title: Text("please enter valid email!"),
+        actions: <Widget>[
+          RaisedButton(
+            color: Colors.blueGrey.shade100,
+            child: Text(
+              "Retry",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future alertpassword(BuildContext context) async {
+    return showDialog(
+      context: context,
+      child: new AlertDialog(
+        title: Text("wrong password entered"),
+        actions: <Widget>[
+          RaisedButton(
+            color: Colors.blueGrey.shade100,
+            child: Text(
+              "Retry",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> signIn() async {
     try {
+      User user;
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: uemail, password: upassword);
       print('successful');
-
-      Navigator.of(context).pushNamed('/FbDb');
+      user = userCredential.user;
+      final uid = user.uid;
+      SharedPreferences pr = await SharedPreferences.getInstance();
+      pr.setString('userId', uid);
+      print(uid);
+      sleep(const Duration(seconds: 1));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
         return false;
       } else if (e.code == 'wrong-password') {
+        alertpassword(context);
         print('Wrong password provided for that user.');
         return false;
       }
     }
   }
 
-  Color iconsColor(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    if (theme.isUsingDark) {
-      return theme.current.accentColor;
-    } else {
-      return theme.current.accentColor;
-    }
-  }
-
-  Color textColor(BuildContext context) {
-    if (NeumorphicTheme.isUsingDark(context)) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
+  bool emailvalid(String email) {
+    Pattern pattern =
+        (r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@utu.ac.in");
+    RegExp regex = new RegExp(pattern);
+    return (!regex.hasMatch(email)) ? false : true;
   }
 }

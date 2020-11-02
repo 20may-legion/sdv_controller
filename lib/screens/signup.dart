@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sdv_controller/screens/signin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snapshot/snapshot.dart';
 import 'package:sdv_controller/screens/fbdb.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -22,7 +23,6 @@ Future<void> main() async {
 }
 
 final FirebaseAuth auth = FirebaseAuth.instance;
-final FirebaseDatabase database = FirebaseDatabase();
 final DatabaseReference dbref = FirebaseDatabase.instance.reference();
 
 class Signup extends StatefulWidget {
@@ -31,7 +31,11 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  String uemail = '', upassword = '', uname = '', ustaffroom = 'CE';
+  String uemail = '',
+      upassword = '',
+      uname = '',
+      ustaffroom = 'CE',
+      cabinno = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +53,14 @@ class _SignupState extends State<Signup> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30.0,
-                      color: textColor(context),
+                      color: Colors.black,
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
                 CircleAvatar(
                   radius: 100,
-                  backgroundColor: iconsColor(context),
+                  backgroundColor: Colors.blueGrey.shade100,
                   child: CircleAvatar(
                     radius: 95,
                     backgroundColor: Colors.grey.shade600,
@@ -64,12 +68,8 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
-                      ),
+                Card(
+                  color: Colors.blueGrey.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -79,9 +79,10 @@ class _SignupState extends State<Signup> {
                             onSubmitted: (input) => uname = input,
                             onChanged: (input) => uname = input,
                             decoration: InputDecoration(
-                                hintText: 'Enter your name',
-                                icon: new Icon(Icons.person,
-                                    size: 30, color: textColor(context))),
+                              hintText: 'Enter your name',
+                              icon: new Icon(Icons.person,
+                                  size: 30, color: Colors.black),
+                            ),
                             keyboardType: TextInputType.text,
                           ),
                         ),
@@ -90,58 +91,106 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
+                Row(
+                  children: [
+                    Card(
+                      color: Colors.blueGrey.shade100,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 80, 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.room,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            DropdownButton<String>(
+                              value: ustaffroom,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 22,
+                              iconEnabledColor: Colors.white,
+                              style: TextStyle(color: Colors.black),
+                              underline: Container(
+                                height: 1,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  ustaffroom = newValue;
+                                });
+                              },
+                              items: <String>[
+                                'CE',
+                                'IT',
+                                'MECH',
+                                'AUTO'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
                       ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.room,
-                          size: 30,
-                          color: textColor(context),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        DropdownButton<String>(
-                          value: ustaffroom,
-                          icon: Icon(Icons.arrow_downward),
-                          iconSize: 22,
-                          iconEnabledColor: Colors.white,
-                          style: TextStyle(color: Colors.black),
-                          underline: Container(
-                            height: 1,
-                            color: Colors.black,
-                          ),
-                          onChanged: (String newValue) {
-                            setState(() {
-                              ustaffroom = newValue;
-                            });
-                          },
-                          items: <String>['CE', 'IT', 'MECH', 'AUTO']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
                     ),
-                  ),
+                    SizedBox(width: 8),
+                    Card(
+                      color: Colors.blueGrey.shade100,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 88, 10),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.room,
+                              size: 30,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            DropdownButton<String>(
+                              value: cabinno,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 22,
+                              iconEnabledColor: Colors.white,
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                              underline: Container(
+                                height: 1,
+                                color: Colors.black,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  cabinno = newValue;
+                                });
+                              },
+                              items: <String>[
+                                '1',
+                                '2',
+                                '3',
+                                '4'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 8),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
-                      ),
+                Card(
+                  color: Colors.blueGrey.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -155,7 +204,7 @@ class _SignupState extends State<Signup> {
                                 icon: new Icon(
                                   Icons.mail,
                                   size: 30,
-                                  color: textColor(context),
+                                  color: Colors.black,
                                 )),
                             keyboardType: TextInputType.text,
                           ),
@@ -165,12 +214,8 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Neumorphic(
-                  style: NeumorphicStyle(
-                      intensity: 1,
-                      depth: -3, //customize depth here
-                      color: iconsColor(context) //customize color here
-                      ),
+                Card(
+                  color: Colors.blueGrey.shade100,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -185,7 +230,7 @@ class _SignupState extends State<Signup> {
                                 icon: new Icon(
                                   Icons.lock,
                                   size: 30,
-                                  color: textColor(context),
+                                  color: Colors.black,
                                 )),
                             keyboardType: TextInputType.text,
                             obscureText: true,
@@ -196,14 +241,18 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 10),
-                NeumorphicButton(
-                  style: NeumorphicStyle(
-                      depth: NeumorphicTheme.of(context).current.depth,
-                      intensity: NeumorphicTheme.of(context).current.intensity,
-                      color: iconsColor(context) //customize color here
-                      ),
-                  onPressed: () {
+                RaisedButton(
+                  color: Colors.blueGrey.shade100,
+                  onPressed: () async {
+                    print(emailvalid(uemail));
+                    if (emailvalid(uemail) == false) {
+                      alert(context);
+                    }
                     signUp();
+                    SharedPreferences pr =
+                        await SharedPreferences.getInstance();
+                    pr.setString('uemail', uemail);
+                    pr.setString('upass', upassword);
                     print(uemail);
                     print(upassword);
                     print(uname);
@@ -211,7 +260,7 @@ class _SignupState extends State<Signup> {
                   },
                   child: Text(
                     'Sign up',
-                    style: TextStyle(color: textColor(context), fontSize: 15),
+                    style: TextStyle(color: Colors.black, fontSize: 15),
                   ),
                 ),
               ],
@@ -229,16 +278,21 @@ class _SignupState extends State<Signup> {
       print('successful');
       final String cuid = userCredential.user.uid;
 
-      dbref.child('Staffroom').child(ustaffroom).child(cuid).set({'bulb': '0'});
       dbref
-          .child('Users')
-          .child(cuid)
-          .set({'email': uemail, 'name': uname, 'staffroom': ustaffroom});
-      final name = new MaterialPageRoute(
-        builder: (BuildContext context) => new FbDb(name: uname),
+          .child('Staffroom')
+          .child(ustaffroom)
+          .child(cabinno)
+          .set({'light': '0', 'fan': '0'});
+      dbref.child('Users').child(cuid).set(
+        {
+          'email': uemail,
+          'name': uname,
+          'staffroom': ustaffroom,
+          'cabin no': cabinno
+        },
       );
 
-      Navigator.of(context).push(name);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -250,20 +304,31 @@ class _SignupState extends State<Signup> {
     }
   }
 
-  Color iconsColor(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    if (theme.isUsingDark) {
-      return theme.current.accentColor;
-    } else {
-      return theme.current.accentColor;
-    }
+  Future alert(BuildContext context) async {
+    return showDialog(
+      context: context,
+      child: new AlertDialog(
+        title: Text("please enter valid email!"),
+        actions: <Widget>[
+          RaisedButton(
+            color: Colors.blueGrey.shade100,
+            child: Text(
+              "Retry",
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
   }
+}
 
-  Color textColor(BuildContext context) {
-    if (NeumorphicTheme.isUsingDark(context)) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
+bool emailvalid(String email) {
+  Pattern pattern = (r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@utu.ac.in");
+  RegExp regex = new RegExp(pattern);
+  return (!regex.hasMatch(email)) ? false : true;
 }

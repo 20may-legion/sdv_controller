@@ -1,0 +1,83 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:sdv_controller/screens/fbdb.dart';
+import 'package:sdv_controller/screens/signin.dart';
+import 'package:sdv_controller/screens/signup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Welcome extends StatefulWidget {
+  @override
+  _WelcomeState createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFF2F2F2),
+      appBar: AppBar(
+        backgroundColor: Colors.blueGrey.shade100,
+        title: Text(
+          'Welcome to SDV Controller',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'WE PROVIDE THE BEST SOLUTION OF YOUR NEED!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 40, //customize size here
+                  // AND others usual text style properties (fontFamily, fontWeight, ...)
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                RaisedButton(
+                  color: Colors.blueGrey.shade100,
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Signin()));
+                  },
+                  child: Text(
+                    'already a member!',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                RaisedButton(
+                  color: Colors.blueGrey.shade100,
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Signup()));
+                  },
+                  child: Text(
+                    'new member!',
+                    style: TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

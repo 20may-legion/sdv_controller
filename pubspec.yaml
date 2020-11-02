@@ -22,6 +22,8 @@ dependencies:
   firebase_storage: ^4.0.0
   google_sign_in: ^3.0.4
   snapshot: ^0.1.0-dev.1
+  firebase_cloud_messaging: ^4.0.4+1
+  shared_preferences: ^0.5.12+2
 
 dev_dependencies:
   flutter_test:
