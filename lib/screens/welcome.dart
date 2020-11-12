@@ -30,15 +30,20 @@ class _WelcomeState extends State<Welcome> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'WE PROVIDE THE BEST SOLUTION OF YOUR NEED!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 40, //customize size here
-                  // AND others usual text style properties (fontFamily, fontWeight, ...)
+            Container(
+              decoration: BoxDecoration(
+                  //todo add box decoration for ui
+                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'WE PROVIDE THE BEST SOLUTION OF YOUR NEED!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40, //customize size here
+                    // AND others usual text style properties (fontFamily, fontWeight, ...)
+                  ),
                 ),
               ),
             ),
