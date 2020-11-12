@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final pr = await SharedPreferences.getInstance();
-  bool logedin = pr.containsKey('userId') ? true : false;
+  bool logedin = pr.containsKey('cuid') ? true : false;
   print(logedin);
 
   runApp(MyApp(logedin: logedin));

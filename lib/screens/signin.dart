@@ -145,10 +145,12 @@ class _SigninState extends State<Signin> {
   }
 
   Future alertemail(BuildContext context) async {
+    SharedPreferences pr = await SharedPreferences.getInstance();
+
     return showDialog(
       context: context,
       child: new AlertDialog(
-        title: Text("please enter valid email!"),
+        title: Text(pr.getString('uemail')),
         actions: <Widget>[
           RaisedButton(
             color: Colors.blueGrey.shade100,
@@ -195,10 +197,10 @@ class _SigninState extends State<Signin> {
           .signInWithEmailAndPassword(email: uemail, password: upassword);
       print('successful');
       user = userCredential.user;
-      final uid = user.uid;
+      var cuid = user.uid;
       SharedPreferences pr = await SharedPreferences.getInstance();
-      pr.setString('userId', uid);
-      print(uid);
+      pr.setString('cuid', cuid);
+      print('cuid:' + pr.getString('cuid'));
       sleep(const Duration(seconds: 1));
       Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb()));
     } on FirebaseAuthException catch (e) {

@@ -1,25 +1,21 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:io';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:path/path.dart'; //needed for basename
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_cloud_messaging/firebase_cloud_messaging.dart';
-import 'package:sdv_controller/main.dart';
-import 'package:sdv_controller/screens/signin.dart';
+import 'package:sdv_controller/screens/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final FirebaseAuth auth = FirebaseAuth.instance;
-final DatabaseReference dbref = FirebaseDatabase.instance.reference();
-// ignore: non_constant_identifier_names
+FirebaseAuth auth = FirebaseAuth.instance;
+DatabaseReference dbref = FirebaseDatabase.instance.reference();
+
+//String cuid = auth.currentUser.uid;
+String cemail = auth.currentUser.email;
 bool FanSwitch = true, LightSwitch = true;
-final String cuid = auth.currentUser.uid;
-final String cemail = auth.currentUser.email;
+
 String cuname, custaffroom, cucabin;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,63 +27,84 @@ class FbDb extends StatefulWidget {
 }
 
 class _FbDbState extends State<FbDb> {
+  void getdata() async {
+    var user = await auth.currentUser;
+
+    if (user.uid == null) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Welcome()));
+    } else {
+      SharedPreferences pr = await SharedPreferences.getInstance();
+
+      String cuid = pr.getString('cuid');
+      dbref
+          .child('Users')
+          .child(cuid)
+          .child('name')
+          .once()
+          .then((DataSnapshot snapshot) {
+        setState(() {
+          cuname = snapshot.value;
+        });
+      });
+      dbref
+          .child('Users')
+          .child(cuid)
+          .child('staffroom')
+          .once()
+          .then((DataSnapshot snapshot) {
+        setState(() {
+          custaffroom = snapshot.value;
+        });
+      });
+      dbref
+          .child('Users')
+          .child(cuid)
+          .child('cabin no')
+          .once()
+          .then((DataSnapshot snapshot) {
+        setState(() {
+          cucabin = snapshot.value;
+        });
+      });
+
+      dbref
+          .child('Staffroom')
+          .child(custaffroom)
+          .child(cucabin)
+          .child('fan')
+          .once()
+          .then((DataSnapshot snapshot) {
+        setState(() {
+          FanSwitch = snapshot.value;
+          //print(snapshot.value);
+          //print(FanSwitch);
+        });
+      });
+      dbref
+          .child('Staffroom')
+          .child(custaffroom)
+          .child(cucabin)
+          .child('light')
+          .once()
+          .then((DataSnapshot snapshot) {
+        setState(() {
+          LightSwitch = snapshot.value;
+        });
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getdata();
+  }
+
   @override
   Widget build(BuildContext context) {
-    /*dbref
-        .child('Users')
-        .child(cuid)
-        .child('name')
-        .once()
-        .then((DataSnapshot snapshot) {
-      setState(() {
-        cuname = snapshot.value;
-      });
-    });*/
-    dbref
-        .child('Users')
-        .child(cuid)
-        .child('staffroom')
-        .once()
-        .then((DataSnapshot snapshot) {
-      setState(() {
-        custaffroom = snapshot.value;
-      });
-    });
-    dbref
-        .child('Users')
-        .child(cuid)
-        .child('cabin no')
-        .once()
-        .then((DataSnapshot snapshot) {
-      setState(() {
-        cucabin = snapshot.value;
-      });
-    });
-
-    dbref
-        .child('Staffroom')
-        .child(custaffroom)
-        .child(cucabin)
-        .child('fan')
-        .once()
-        .then((DataSnapshot snapshot) {
-      setState(() {
-        FanSwitch = snapshot.value;
-        //print(snapshot.value);
-        //print(FanSwitch);
-      });
-    });
-    dbref
-        .child('Staffroom')
-        .child(custaffroom)
-        .child(cucabin)
-        .child('light')
-        .once()
-        .then((DataSnapshot snapshot) {
-      setState(() {
-        LightSwitch = snapshot.value;
-      });
-    });
+    /**/
 
     /*MediaQueryData queryData;
     queryData = MediaQuery.of(context);
@@ -110,9 +127,7 @@ class _FbDbState extends State<FbDb> {
                     Center(
                       child: FlatButton.icon(
                         onPressed: () async {
-                          logout(context);
-                          final pr = await SharedPreferences.getInstance();
-                          pr.remove('userId');
+                          logout();
                           print("logout");
                         },
                         icon: Icon(Icons.check),
@@ -129,8 +144,7 @@ class _FbDbState extends State<FbDb> {
       appBar: new AppBar(
         backgroundColor: Colors.blueGrey.shade100,
         title: new Text(
-          "hello",
-          //cuname,
+          "hello " + cuname,
           style: TextStyle(color: Colors.black),
         ), //todo add name from database
       ),
@@ -196,6 +210,8 @@ class _FbDbState extends State<FbDb> {
                       ),
                       RaisedButton(onPressed: () {
                         //print(h);
+                        //print(cuid);
+
                         //print(w);
                       })
                     ],
@@ -257,13 +273,17 @@ class _FbDbState extends State<FbDb> {
     }
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     try {
-      auth.signOut();
+      await auth.signOut();
+      final pr = await SharedPreferences.getInstance();
+      print('cuid:' + pr.getString('cuid'));
+      pr.remove('cuid');
+
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Signin()));
+          context, MaterialPageRoute(builder: (context) => Welcome()));
     } catch (e) {
-      //print(e.toString());
+      print(e.toString());
     }
   }
 }
