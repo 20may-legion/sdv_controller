@@ -97,7 +97,6 @@ class _FbDbState extends State<FbDb> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getdata();
   }
