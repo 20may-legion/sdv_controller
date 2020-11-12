@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sdv_controller/screens/signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snapshot/snapshot.dart';
 import 'package:sdv_controller/screens/fbdb.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 

@@ -103,8 +103,6 @@ class _FbDbState extends State<FbDb> {
 
   @override
   Widget build(BuildContext context) {
-    /**/
-
     /*MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     double h = queryData.size.height;
