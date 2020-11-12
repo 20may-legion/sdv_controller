@@ -33,7 +33,7 @@ class _SignupState extends State<Signup> {
   String uemail = '',
       upassword = '',
       uname = '',
-      ustaffroom = 'CE',
+      ustaffroom = 'MECH',
       cabinno = '1';
 
   @override
