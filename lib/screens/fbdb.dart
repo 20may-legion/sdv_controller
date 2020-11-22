@@ -73,6 +73,7 @@ class _FbDbState extends State<FbDb> {
           .child(custaffroom)
           .child(cucabin)
           .child('fan')
+          .child('status')
           .once()
           .then((DataSnapshot snapshot) {
         setState(() {
@@ -86,6 +87,7 @@ class _FbDbState extends State<FbDb> {
           .child(custaffroom)
           .child(cucabin)
           .child('light')
+          .child('status')
           .once()
           .then((DataSnapshot snapshot) {
         setState(() {
@@ -103,118 +105,139 @@ class _FbDbState extends State<FbDb> {
 
   @override
   Widget build(BuildContext context) {
-    /*MediaQueryData queryData;
+    MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     double h = queryData.size.height;
-    double w = queryData.size.width;*/
-    return new Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text("hello"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Card(
-                color: Colors.blueGrey.shade100,
-                child: Row(
-                  children: [
-                    Center(
-                      child: FlatButton.icon(
-                        onPressed: () async {
-                          logout();
-                          print("logout");
-                        },
-                        icon: Icon(Icons.check),
-                        label: Text("logout"),
-                      ),
-                    )
-                  ],
-                ),
+    double w = queryData.size.width;
+    return MaterialApp(
+      home: new Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text("hello"),
               ),
-            )
-          ],
-        ),
-      ),
-      appBar: new AppBar(
-        backgroundColor: Colors.blueGrey.shade100,
-        title: new Text(
-          "hello " + cuname,
-          style: TextStyle(color: Colors.black),
-        ), //todo add name from database
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: new Container(
-              padding: new EdgeInsets.all(16.0),
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage('images/fbdb$cucabin.png'),
-                  ),
-                  SizedBox(height: 20),
-                  Column(
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  color: Colors.blueGrey.shade100,
+                  child: Row(
                     children: [
-                      Card(
-                        color: Colors.blueGrey.shade100,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image(
-                                image: AssetImage('images/fan.png'),
-                                height: 100,
-                              ),
-                              NeumorphicSwitch(
-                                value: FanSwitch,
-                                style: NeumorphicSwitchStyle(
-                                    inactiveTrackColor: Colors.pinkAccent,
-                                    activeTrackColor: Colors
-                                        .greenAccent), //todo add secondary color
-                                onChanged: toggleFan,
-                              ),
-                            ],
-                          ),
+                      Center(
+                        child: FlatButton.icon(
+                          onPressed: () async {
+                            logout();
+                            print("logout");
+                          },
+                          icon: Icon(Icons.check),
+                          label: Text("logout"),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Card(
-                        color: Colors.blueGrey.shade100,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image(
-                                image: AssetImage('images/lamp.png'),
-                                height: 100,
-                              ),
-                              NeumorphicSwitch(
-                                value: LightSwitch,
-                                style: NeumorphicSwitchStyle(
-                                    inactiveTrackColor: Colors.pinkAccent,
-                                    activeTrackColor: Colors
-                                        .greenAccent), //todo add secondary color
-                                onChanged: toggleLight,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      RaisedButton(onPressed: () {
-                        //print(h);
-                        //print(cuid);
-
-                        //print(w);
-                      })
+                      )
                     ],
                   ),
-                ],
-              )),
+                ),
+              )
+            ],
+          ),
+        ),
+        appBar: new AppBar(
+          backgroundColor: Colors.blueGrey.shade100,
+          title: new Text(
+            "hello " + cuname,
+            style: TextStyle(color: Colors.black),
+          ), //todo add name from database
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                new Container(
+                    padding: new EdgeInsets.all(16.0),
+                    child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage('images/fbdb$cucabin.png'),
+                          height: h / 2.5,
+                          width: w,
+                        ),
+                        SizedBox(height: 10),
+                        new Container(
+                          padding: EdgeInsets.only(left: 16),
+                          decoration: BoxDecoration(),
+                          child: Text(
+                            "You are currently accessing cabin $cucabin in $custaffroom staffroom",
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Column(
+                          children: [
+                            Card(
+                              color: Colors.blueGrey.shade100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Image(
+                                      image: AssetImage('images/fan.png'),
+                                      height: 100,
+                                    ),
+                                    NeumorphicSwitch(
+                                      value: FanSwitch,
+                                      style: NeumorphicSwitchStyle(
+                                          inactiveTrackColor: Colors.pinkAccent,
+                                          activeTrackColor: Colors
+                                              .greenAccent), //todo add secondary color
+                                      onChanged: toggleFan,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Card(
+                              color: Colors.blueGrey.shade100,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Image(
+                                      image: AssetImage('images/lamp.png'),
+                                      height: 100,
+                                    ),
+                                    NeumorphicSwitch(
+                                      value: LightSwitch,
+                                      style: NeumorphicSwitchStyle(
+                                          inactiveTrackColor: Colors.pinkAccent,
+                                          activeTrackColor: Colors
+                                              .greenAccent), //todo add secondary color
+                                      onChanged: toggleLight,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            RaisedButton(onPressed: () {
+                              print(h);
+                              print(w);
+                              //print(cuid);
+
+                              //print(w);
+                            })
+                          ],
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -230,7 +253,8 @@ class _FbDbState extends State<FbDb> {
           .child('Staffroom')
           .child(custaffroom)
           .child(cucabin)
-          .update({'fan': FanSwitch});
+          .child('fan')
+          .update({'status': FanSwitch});
     } else {
       setState(() {
         FanSwitch = false;
@@ -242,7 +266,8 @@ class _FbDbState extends State<FbDb> {
           .child('Staffroom')
           .child(custaffroom)
           .child(cucabin)
-          .update({'fan': FanSwitch});
+          .child('fan')
+          .update({'status': FanSwitch});
     }
   }
 
@@ -256,7 +281,8 @@ class _FbDbState extends State<FbDb> {
           .child('Staffroom')
           .child(custaffroom)
           .child(cucabin)
-          .update({'light': LightSwitch});
+          .child('light')
+          .update({'status': LightSwitch});
     } else {
       setState(() {
         LightSwitch = false;
@@ -266,7 +292,8 @@ class _FbDbState extends State<FbDb> {
           .child('Staffroom')
           .child(custaffroom)
           .child(cucabin)
-          .update({'light': LightSwitch});
+          .child('light')
+          .update({'status': LightSwitch});
     }
   }
 

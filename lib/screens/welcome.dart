@@ -52,30 +52,46 @@ class _WelcomeState extends State<Welcome> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                RaisedButton(
-                  color: Colors.blueGrey.shade100,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Signin()));
-                  },
-                  child: Text(
-                    'already a member!',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
+                Container(
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Signin()));
+                    },
+                    child: Text(
+                      'already a member!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
-                RaisedButton(
-                  color: Colors.blueGrey.shade100,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Signup()));
-                  },
-                  child: Text(
-                    'new member!',
-                    style: TextStyle(fontSize: 20, color: Colors.black),
+                Container(
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Signup()));
+                    },
+                    child: Text(
+                      'new member!',
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
                   ),
                 ),
               ],
