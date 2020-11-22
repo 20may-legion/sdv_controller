@@ -282,13 +282,13 @@ class _SignupState extends State<Signup> {
           .child(ustaffroom)
           .child(cabinno)
           .child("light")
-          .set({'status': false});
+          .set({'status': false, 'ontime': 0});
       dbref
           .child('Staffroom')
           .child(ustaffroom)
           .child(cabinno)
           .child("fan")
-          .set({'status': false});
+          .set({'status': false, 'ontime': 0});
       dbref.child('Users').child(cuid).set(
         {
           'email': uemail,
