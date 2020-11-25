@@ -15,7 +15,7 @@ DatabaseReference dbref = FirebaseDatabase.instance.reference();
 //String cuid = auth.currentUser.uid;
 String cemail = auth.currentUser.email;
 bool FanSwitch = true, LightSwitch = true;
-
+String cuid;
 String cuname, custaffroom, cucabin;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,65 +35,7 @@ class _FbDbState extends State<FbDb> {
           context, MaterialPageRoute(builder: (context) => Welcome()));
     } else {
       SharedPreferences pr = await SharedPreferences.getInstance();
-
-      String cuid = pr.getString('cuid');
-      dbref
-          .child('Users')
-          .child(cuid)
-          .child('name')
-          .once()
-          .then((DataSnapshot snapshot) {
-        setState(() {
-          cuname = snapshot.value;
-        });
-      });
-      dbref
-          .child('Users')
-          .child(cuid)
-          .child('staffroom')
-          .once()
-          .then((DataSnapshot snapshot) {
-        setState(() {
-          custaffroom = snapshot.value;
-        });
-      });
-      dbref
-          .child('Users')
-          .child(cuid)
-          .child('cabin no')
-          .once()
-          .then((DataSnapshot snapshot) {
-        setState(() {
-          cucabin = snapshot.value;
-        });
-      });
-
-      dbref
-          .child('Staffroom')
-          .child(custaffroom)
-          .child(cucabin)
-          .child('fan')
-          .child('status')
-          .once()
-          .then((DataSnapshot snapshot) {
-        setState(() {
-          FanSwitch = snapshot.value;
-          //print(snapshot.value);
-          //print(FanSwitch);
-        });
-      });
-      dbref
-          .child('Staffroom')
-          .child(custaffroom)
-          .child(cucabin)
-          .child('light')
-          .child('status')
-          .once()
-          .then((DataSnapshot snapshot) {
-        setState(() {
-          LightSwitch = snapshot.value;
-        });
-      });
+      cuid = pr.getString('cuid');
     }
   }
 
@@ -105,6 +47,64 @@ class _FbDbState extends State<FbDb> {
 
   @override
   Widget build(BuildContext context) {
+    dbref
+        .child('Users')
+        .child(cuid)
+        .child('name')
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        cuname = snapshot.value;
+      });
+    });
+    dbref
+        .child('Users')
+        .child(cuid)
+        .child('staffroom')
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        custaffroom = snapshot.value;
+      });
+    });
+    dbref
+        .child('Users')
+        .child(cuid)
+        .child('cabin no')
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        cucabin = snapshot.value;
+      });
+    });
+
+    dbref
+        .child('Staffroom')
+        .child(custaffroom)
+        .child(cucabin)
+        .child('fan')
+        .child('status')
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        FanSwitch = snapshot.value;
+        //print(snapshot.value);
+        //print(FanSwitch);
+      });
+    });
+    dbref
+        .child('Staffroom')
+        .child(custaffroom)
+        .child(cucabin)
+        .child('light')
+        .child('status')
+        .once()
+        .then((DataSnapshot snapshot) {
+      setState(() {
+        LightSwitch = snapshot.value;
+        print(LightSwitch);
+      });
+    });
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     double h = queryData.size.height;
