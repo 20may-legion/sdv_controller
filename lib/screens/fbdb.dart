@@ -28,7 +28,7 @@ class FbDb extends StatefulWidget {
 
 class _FbDbState extends State<FbDb> {
   void getdata() async {
-    var user = auth.currentUser;
+    var user = await auth.currentUser;
 
     if (user.uid == null) {
       Navigator.push(
