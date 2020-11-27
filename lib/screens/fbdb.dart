@@ -28,7 +28,7 @@ class FbDb extends StatefulWidget {
 
 class _FbDbState extends State<FbDb> {
   void getdata() async {
-    var user = await auth.currentUser;
+    var user = auth.currentUser;
 
     if (user.uid == null) {
       Navigator.push(
@@ -109,6 +109,7 @@ class _FbDbState extends State<FbDb> {
     queryData = MediaQuery.of(context);
     double h = queryData.size.height;
     double w = queryData.size.width;
+
     return MaterialApp(
       home: new Scaffold(
         drawer: Drawer(
