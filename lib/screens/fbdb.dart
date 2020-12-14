@@ -15,7 +15,7 @@ DatabaseReference dbref = FirebaseDatabase.instance.reference();
 //String cuid = auth.currentUser.uid;
 String cemail = auth.currentUser.email;
 bool FanSwitch = true, LightSwitch = true;
-String cuid;
+String cuid = auth.currentUser.uid;
 String cuname, custaffroom, cucabin;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class FbDb extends StatefulWidget {
 
 class _FbDbState extends State<FbDb> {
   void getdata() async {
-    var user = await auth.currentUser;
+    var user = auth.currentUser;
 
     if (user.uid == null) {
       Navigator.push(
@@ -228,6 +228,7 @@ class _FbDbState extends State<FbDb> {
                             RaisedButton(onPressed: () {
                               print(h);
                               print(w);
+
                               //print(cuid);
 
                               //print(w);

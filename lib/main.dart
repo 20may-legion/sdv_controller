@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   final pr = await SharedPreferences.getInstance();
   bool logedin = pr.containsKey('cuid') ? true : false;
   print(logedin);

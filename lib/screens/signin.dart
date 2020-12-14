@@ -141,12 +141,10 @@ class _SigninState extends State<Signin> {
   }
 
   Future alertemail(BuildContext context) async {
-    SharedPreferences pr = await SharedPreferences.getInstance();
-
     return showDialog(
       context: context,
       child: new AlertDialog(
-        title: Text(pr.getString('uemail')),
+        title: Text("not valid email!"),
         actions: <Widget>[
           RaisedButton(
             color: Colors.blueGrey.shade100,
@@ -193,7 +191,7 @@ class _SigninState extends State<Signin> {
           .signInWithEmailAndPassword(email: uemail, password: upassword);
       print('successful');
       user = userCredential.user;
-      var cuid = user.uid;
+      String cuid = user.uid;
       SharedPreferences pr = await SharedPreferences.getInstance();
       pr.setString('cuid', cuid);
       print('cuid:' + pr.getString('cuid'));

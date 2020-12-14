@@ -276,6 +276,7 @@ class _SignupState extends State<Signup> {
           email: uemail, password: upassword);
       print('successful');
       final String cuid = userCredential.user.uid;
+      print(cuid);
 
       dbref
           .child('Staffroom')
