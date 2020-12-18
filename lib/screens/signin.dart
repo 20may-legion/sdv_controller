@@ -196,7 +196,7 @@ class _SigninState extends State<Signin> {
       pr.setString('cuid', cuid);
       print('cuid:' + pr.getString('cuid'));
       sleep(const Duration(seconds: 1));
-      Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb(cuid: cuid,)));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

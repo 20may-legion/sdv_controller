@@ -299,7 +299,12 @@ class _SignupState extends State<Signup> {
         },
       );
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => FbDb()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FbDb(
+                    cuid: cuid,
+                  )));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');

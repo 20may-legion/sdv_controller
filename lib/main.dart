@@ -13,6 +13,7 @@ void main() async {
 
   final pr = await SharedPreferences.getInstance();
   bool logedin = pr.containsKey('cuid') ? true : false;
+
   print(logedin);
 
   runApp(MyApp(logedin: logedin));
@@ -26,12 +27,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String _cuid;
+  void getuid() async {
+    final pr = await SharedPreferences.getInstance();
+    _cuid = pr.getString('cuid');
+    print(_cuid);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getuid();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // ignore: unrelated_type_equality_checks
-      home: widget.logedin ? FbDb() : Welcome(),
+      // ignore: unrelated_type_equality_checks\
+
+      home: widget.logedin
+          ? FbDb(
+              cuid: _cuid,
+            )
+          : Welcome(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'package:sdv_controller/main.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -15,27 +15,29 @@ DatabaseReference dbref = FirebaseDatabase.instance.reference();
 //String cuid = auth.currentUser.uid;
 String cemail = auth.currentUser.email;
 bool FanSwitch = true, LightSwitch = true;
-String cuid = auth.currentUser.uid;
-String cuname, custaffroom, cucabin;
+
+String cuname, custaffroom, cucabin, cuid;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 }
 
+// ignore: must_be_immutable
 class FbDb extends StatefulWidget {
+  String cuid;
+  FbDb({Key key, @required this.cuid}) : super(key: key);
   @override
   _FbDbState createState() => new _FbDbState();
 }
 
 class _FbDbState extends State<FbDb> {
   void getdata() async {
-    var user = auth.currentUser;
-
+    User user = auth.currentUser;
     if (user.uid == null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Welcome()));
     } else {
       SharedPreferences pr = await SharedPreferences.getInstance();
-      cuid = pr.getString('cuid');
+      String cuid = pr.getString('cuid');
     }
   }
 
