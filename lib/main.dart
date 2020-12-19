@@ -29,9 +29,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _cuid;
   void getuid() async {
-    final pr = await SharedPreferences.getInstance();
-    _cuid = pr.getString('cuid');
-    print(_cuid);
+    SharedPreferences pr = await SharedPreferences.getInstance();
+    setState(() {
+      _cuid = pr.getString('cuid');
+    });
+    print("sp uid $_cuid");
   }
 
   @override

@@ -21,8 +21,8 @@ Future<void> main() async {
       ));
 }
 
-final FirebaseAuth auth = FirebaseAuth.instance;
-final DatabaseReference dbref = FirebaseDatabase.instance.reference();
+FirebaseAuth auth = FirebaseAuth.instance;
+DatabaseReference dbref = FirebaseDatabase.instance.reference();
 
 class Signup extends StatefulWidget {
   @override
@@ -275,7 +275,7 @@ class _SignupState extends State<Signup> {
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: uemail, password: upassword);
       print('successful');
-      final String cuid = userCredential.user.uid;
+      String cuid = userCredential.user.uid;
       print(cuid);
 
       dbref

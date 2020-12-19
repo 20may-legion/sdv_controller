@@ -13,7 +13,6 @@ FirebaseAuth auth = FirebaseAuth.instance;
 DatabaseReference dbref = FirebaseDatabase.instance.reference();
 
 //String cuid = auth.currentUser.uid;
-String cemail = auth.currentUser.email;
 bool FanSwitch = true, LightSwitch = true;
 
 String cuname, custaffroom, cucabin, cuid;
@@ -31,13 +30,18 @@ class FbDb extends StatefulWidget {
 
 class _FbDbState extends State<FbDb> {
   void getdata() async {
-    User user = auth.currentUser;
-    if (user.uid == null) {
+    SharedPreferences pr = await SharedPreferences.getInstance();
+    cuid = pr.getString('cuid');
+    //User user = auth.currentUser;
+    if (cuid == null) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Welcome()));
     } else {
       SharedPreferences pr = await SharedPreferences.getInstance();
-      String cuid = pr.getString('cuid');
+
+      setState(() {
+        cuid = pr.getString('cuid');
+      });
     }
   }
 
@@ -49,6 +53,8 @@ class _FbDbState extends State<FbDb> {
 
   @override
   Widget build(BuildContext context) {
+    cuid = widget.cuid;
+    print(cuid);
     dbref
         .child('Users')
         .child(cuid)
@@ -170,7 +176,8 @@ class _FbDbState extends State<FbDb> {
                           padding: EdgeInsets.only(left: 16),
                           decoration: BoxDecoration(),
                           child: Text(
-                            "You are currently accessing cabin $cucabin in $custaffroom staffroom",
+                            widget.cuid,
+                            // "You are currently accessing cabin $cucabin in $custaffroom staffroom",
                             style: TextStyle(fontSize: 18),
                             textAlign: TextAlign.center,
                           ),
@@ -304,12 +311,20 @@ class _FbDbState extends State<FbDb> {
   Future<void> logout() async {
     try {
       await auth.signOut();
-      final pr = await SharedPreferences.getInstance();
+      SharedPreferences pr = await SharedPreferences.getInstance();
       print('cuid:' + pr.getString('cuid'));
       pr.remove('cuid');
-
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Welcome()));
+      if (pr.getString('cuid') == null) {
+        print("shared preference removed");
+      }
+      setState(() {
+        cuid = "";
+      });
+      print(cuid);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Welcome()),
+          (Route<dynamic> route) => false);
     } catch (e) {
       print(e.toString());
     }
