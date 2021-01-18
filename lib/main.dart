@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  final pr = await SharedPreferences.getInstance();
+  SharedPreferences pr = await SharedPreferences.getInstance();
   bool logedin = pr.containsKey('cuid') ? true : false;
 
   print(logedin);
@@ -19,15 +19,18 @@ void main() async {
   runApp(MyApp(logedin: logedin));
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatefulWidget {
   MyApp({this.logedin});
-  final bool logedin;
+  bool logedin;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   String _cuid;
+
   void getuid() async {
     SharedPreferences pr = await SharedPreferences.getInstance();
     setState(() {
@@ -45,6 +48,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    bool login = widget.logedin;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // ignore: unrelated_type_equality_checks\

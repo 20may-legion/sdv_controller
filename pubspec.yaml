@@ -23,6 +23,7 @@ dependencies:
   snapshot: ^0.1.0-dev.1
   firebase_cloud_messaging: ^4.0.4+1
   shared_preferences: ^0.5.12+2
+  syncfusion_flutter_charts: ^18.4.34
 
 dev_dependencies:
   flutter_test:

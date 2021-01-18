@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -6,6 +8,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sdv_controller/screens/ontime.dart';
 import 'package:sdv_controller/screens/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,8 +56,12 @@ class _FbDbState extends State<FbDb> {
 
   @override
   Widget build(BuildContext context) {
-    cuid = widget.cuid;
+    setState(() {
+      cuid = widget.cuid;
+    });
+
     print(cuid);
+
     dbref
         .child('Users')
         .child(cuid)
@@ -110,7 +117,6 @@ class _FbDbState extends State<FbDb> {
         .then((DataSnapshot snapshot) {
       setState(() {
         LightSwitch = snapshot.value;
-        print(LightSwitch);
       });
     });
     MediaQueryData queryData;
@@ -146,15 +152,42 @@ class _FbDbState extends State<FbDb> {
                     ],
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  color: Colors.blueGrey.shade100,
+                  child: Row(
+                    children: [
+                      Center(
+                        child: FlatButton.icon(
+                          onPressed: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OnTime(
+                                      cuid: cuid,
+                                    )));
+                            print("on time");
+                          },
+                          icon: Icon(Icons.watch_later_outlined),
+                          label: Text("ontime"),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               )
             ],
           ),
         ),
         appBar: new AppBar(
           backgroundColor: Colors.blueGrey.shade100,
-          title: new Text(
-            "hello " + cuname,
-            style: TextStyle(color: Colors.black),
+          title: GestureDetector(
+            child: new Text(
+              "hello " + cuname,
+              style: TextStyle(color: Colors.black),
+            ),
           ), //todo add name from database
         ),
         body: SingleChildScrollView(
@@ -176,8 +209,7 @@ class _FbDbState extends State<FbDb> {
                           padding: EdgeInsets.only(left: 16),
                           decoration: BoxDecoration(),
                           child: Text(
-                            widget.cuid,
-                            // "You are currently accessing cabin $cucabin in $custaffroom staffroom",
+                            "You are currently accessing cabin $cucabin in $custaffroom staffroom",
                             style: TextStyle(fontSize: 18),
                             textAlign: TextAlign.center,
                           ),

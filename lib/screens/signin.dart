@@ -198,7 +198,7 @@ class _SigninState extends State<Signin> {
       SharedPreferences pr = await SharedPreferences.getInstance();
       pr.setString('cuid', cuid);
       print('cuid:' + pr.getString('cuid'));
-      sleep(const Duration(seconds: 1));
+      //sleep(const Duration(seconds: 1));
       Navigator.push(
           context,
           MaterialPageRoute(
